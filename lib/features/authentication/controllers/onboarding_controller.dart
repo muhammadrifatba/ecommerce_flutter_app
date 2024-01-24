@@ -1,13 +1,31 @@
-import'package:get/get.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:t_store/features/authentication/screen/login/login.dart';
 
-class OnBoardingController extends GetxController{
+class OnBoardingController extends GetxController {
   static OnBoardingController get instance => Get.find();
 
-  void updatePageIndicator(index){}
+  final pageController = PageController();
+  Rx<int> currentPageIndex = 0.obs;
 
-  void dotNavigationClick(index){}
+  void updatePageIndicator(index) => currentPageIndex.value = index;
 
-  void nextPage(){}
+  void dotNavigationClick(index) {
+    currentPageIndex.value = index;
+    pageController.jumpTo(index);
+  }
 
-  void skipPage(){}
+  void nextPage() {
+    if (currentPageIndex.value == 2) {
+      Get.offAll(LoginScreen());
+    } else {
+      int page = currentPageIndex.value + 1;
+      pageController.jumpToPage(page);
+    }
+  }
+
+  void skipPage() {
+    currentPageIndex.value = 2;
+    pageController.jumpTo(2);
+  }
 }
