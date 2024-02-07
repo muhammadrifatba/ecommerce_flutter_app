@@ -8,6 +8,7 @@ import 'package:t_store/common/widgets/images/t_rounded_image.dart';
 import 'package:t_store/common/widgets/texts/produc_price_text.dart';
 import 'package:t_store/common/widgets/texts/product_title.dart';
 import 'package:t_store/common/widgets/texts/t_brand_title_with_verified_icon.dart';
+import 'package:t_store/features/shop/screens/product_details/product_detail.dart';
 import 'package:t_store/utils/constants/colors.dart';
 import 'package:t_store/utils/constants/image_strings.dart';
 import 'package:t_store/utils/constants/sizes.dart';
@@ -20,7 +21,7 @@ class TProductCardVertical extends StatelessWidget {
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
     return GestureDetector(
-      onTap: () {},
+      onTap: () => Get.to(() => const ProductDetailScreen()),
       child: Container(
         width: 180,
         padding: const EdgeInsets.all(1),
@@ -74,9 +75,10 @@ class TProductCardVertical extends StatelessWidget {
           const SizedBox(
             height: TSizes.spaceBtwItems / 2,
           ),
-          const Row(children: [
-            Padding(
-              padding: EdgeInsets.only(left: TSizes.sm),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: TSizes.sm),
+            child: SizedBox(
+              width: double.infinity,
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -92,7 +94,7 @@ class TProductCardVertical extends StatelessWidget {
                     ),
                   ]),
             ),
-          ]),
+          ),
           const Spacer(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
