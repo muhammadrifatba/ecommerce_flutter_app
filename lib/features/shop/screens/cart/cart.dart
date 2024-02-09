@@ -9,6 +9,8 @@ import 'package:t_store/common/widgets/products_cart/cart/cart_item.dart';
 import 'package:t_store/common/widgets/texts/produc_price_text.dart';
 import 'package:t_store/common/widgets/texts/product_title.dart';
 import 'package:t_store/common/widgets/texts/t_brand_title_with_verified_icon.dart';
+import 'package:t_store/features/shop/screens/cart/widgets/cart_item.dart';
+import 'package:t_store/features/shop/screens/checkout/checkout.dart';
 import 'package:t_store/utils/constants/colors.dart';
 import 'package:t_store/utils/constants/image_strings.dart';
 import 'package:t_store/utils/constants/sizes.dart';
@@ -26,41 +28,12 @@ class CartScreen extends StatelessWidget {
           style: Theme.of(context).textTheme.headlineSmall,
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(TSizes.defaultSpace),
-        child: ListView.separated(
-            shrinkWrap: true,
-            itemCount: 10,
-            separatorBuilder: (_, __) => const SizedBox(
-                  height: TSizes.spaceBtwSections,
-                ),
-            itemBuilder: (_, index) => const Column(
-                  children: [
-                    TCartItem(),
-                    SizedBox(
-                      height: TSizes.spaceBtwItems,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            SizedBox(
-                              width: 70,
-                            ),
-                            TProductQuantityWithAddRemoveBUtton(),
-                          ],
-                        ),
-                        TProductPriceText(price: '256000')
-                      ],
-                    ),
-                  ],
-                )),
-      ),
+      body: const Padding(
+          padding: EdgeInsets.all(TSizes.defaultSpace), child: TCartItems()),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(TSizes.defaultSpace),
         child: ElevatedButton(
-          onPressed: () {},
+          onPressed: () => Get.to(() => const CheckoutScreen()),
           child: const Text('Checkout Rp 250000'),
         ),
       ),
