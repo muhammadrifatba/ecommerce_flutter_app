@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:get/get.dart";
+import "package:get_storage/get_storage.dart";
 import "package:iconsax/iconsax.dart";
 import "package:t_store/features/authentication/controllers/sign_up/signup_controller.dart";
 import "package:t_store/features/authentication/screen/sign_up/sign_up_widget/sign_up_tc_checkbox.dart";
@@ -94,14 +95,23 @@ class SignUpForm extends StatelessWidget {
               height: TSizes.spaceBtwInputFields,
             ),
             //password
-            TextFormField(
-              expands: false,
-              controller: controller.password,
-              validator: (value) => TValidator.validatePassword(value),
-              decoration: const InputDecoration(
+            Obx(
+              () => TextFormField(
+                expands: false,
+                controller: controller.password,
+                obscureText: controller.hidePassword.value,
+                validator: (value) => TValidator.validatePassword(value),
+                decoration: InputDecoration(
                   labelText: TTexts.password,
-                  prefixIcon: Icon(Iconsax.password_check),
-                  suffixIcon: Icon(Iconsax.eye_slash)),
+                  prefixIcon: const Icon(Iconsax.password_check),
+                  suffixIcon: IconButton(
+                      onPressed: () => controller.hidePassword.value =
+                          !controller.hidePassword.value,
+                      icon: Icon(controller.hidePassword.value
+                          ? Iconsax.eye_slash
+                          : Iconsax.eye)),
+                ),
+              ),
             ),
             const SizedBox(
               height: TSizes.spaceBtwInputFields,

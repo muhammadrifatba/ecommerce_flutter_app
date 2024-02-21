@@ -1,34 +1,85 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:t_store/common/widgets/loader/loaders.dart';
+import 'package:t_store/data/repositories/repositories_authentication/authentication_repository.dart';
+import 'package:t_store/data/repositories/user/user_repository.dart';
+import 'package:t_store/features/authentication/screen/sign_up/verify_email.dart';
+import 'package:t_store/features/personalization/models/user_model.dart';
+import 'package:t_store/features/personalization/screens/profile/widgets/profile.dart';
 import 'package:t_store/utils/constants/image_strings.dart';
+import 'package:t_store/utils/helpers/network_manager.dart';
 import 'package:t_store/utils/popups/full_screen_loader.dart';
 
 class SignupController extends GetxController {
-
   static SignupController get instance => Get.find();
-
-  final email =TextEditingController();
+  final hidePassword = true.obs;
+  final privacyPolicy = true.obs;
+  final email = TextEditingController();
   final lastName = TextEditingController();
   final username = TextEditingController();
   final password = TextEditingController();
   final firstName = TextEditingController();
-  final phoneNumber= TextEditingController();
-  GlobalKey <FormState> signupFormKey = GlobalKey<FormState>();
+  final phoneNumber = TextEditingController();
+  GlobalKey<FormState> signupFormKey = GlobalKey<FormState>();
 
-
-  @override
-  Future<void> signup() async {
+  void signup() async {
     try {
-      TFullScreenLoader.openLoadingDialog("We are processing your information", TImages.docerAnimation);
+      // Loading
+      TFullScreenLoader.openLoadingDialog(
+          "We are processing your information", TImages.docerAnimation);
 
-      final isConnected = await Network
+      //Check Internet COnnection
+      final isConnected = await NetworkManager.instance.isConnected();
+      if (!isConnected) {
+        TFullScreenLoader.stopLoading();
+        return;
+      }
+
+      //Form Validation
+      if (!signupFormKey.currentState!.validate()) {
+        TFullScreenLoader.stopLoading();
+        return;
+      }
+
+      //Privacy policy check
+      if (!privacyPolicy.value) {
+        TLoaders.warningSnackBar(
+            title: 'Please Accept Privacy Policy',
+            message:
+                'In Order to create account, you must have to read and accept the Privacy Policy Term of Use');
+        return;
+      }
+      // register user in the Firebase Authentication  & Save User Data  in the firebase
+      final user = await AuthenticationRepository.instance
+          .registerWithEmailAndPassword(
+              email.text.trim(), password.text.trim());
+
+      // Save auuthentication user data in the firebase firestore
+      final newUser = UserModel(
+        id: user.user!.uid,
+        firstName: firstName.text.trim(),
+        lastName: lastName.text.trim(),
+        username: username.text.trim(),
+        email: username.text.trim(),
+        phoneNumber: phoneNumber.text.trim(),
+        profilePicture: "",
+      );
+
+      final userRepository = Get.put(UserRepository());
+      await userRepository.saveUserRecord(newUser);
+
+      TFullScreenLoader.stopLoading();
+
+      TLoaders.succesSnackBar(
+          title: 'Congratulaions',
+          message: 'Your Account has been created Verify email and continue');
+
+      Get.to(() => VerifyEmailScreen(email: email.text.trim()));
+    } catch (e) {
+      TFullScreenLoader.stopLoading();
+      TLoaders.errroSnackBar(title: 'Oh Snap', message: e.toString());
     }
-    catch (e) {
-
-    }finally{
-
-    }
-
   }
 }

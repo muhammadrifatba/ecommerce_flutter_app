@@ -1,14 +1,10 @@
 import "package:flutter/material.dart";
-import "package:iconsax/iconsax.dart";
 import "package:t_store/common/styles/spacing_styles.dart";
 import "package:t_store/common/widgets/login_signup_widgets/form_divider.dart";
 import "package:t_store/common/widgets/login_signup_widgets/form_social_button.dart";
 import "package:t_store/features/authentication/screen/sign_up/sign_up_widget/sign_up_form.dart";
-import "package:t_store/features/authentication/screen/sign_up/sign_up_widget/sign_up_tc_checkbox.dart";
-import "package:t_store/utils/constants/colors.dart";
 import "package:t_store/utils/constants/sizes.dart";
 import "package:t_store/utils/constants/text_strings.dart";
-import "package:t_store/utils/helpers/helper_functions.dart";
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});

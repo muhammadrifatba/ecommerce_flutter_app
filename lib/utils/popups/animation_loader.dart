@@ -11,7 +11,7 @@ class TAnimatonLoaderWidget extends StatelessWidget {
       {super.key,
       required this.text,
       required this.animation,
-      required this.showAction,
+      this.showAction = false,
       this.actionText,
       this.onActionPressed});
 
